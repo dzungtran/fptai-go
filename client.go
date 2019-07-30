@@ -12,6 +12,7 @@ const (
 	DefaultApiVersion = "v3"
 	ApiBaseUrl        = "https://v3-api.fpt.ai/api"
 )
+
 // API docs: https://docs.fpt.ai/#general
 type Client struct {
 	BotToken   string
@@ -23,7 +24,7 @@ type Client struct {
 }
 
 type CommonResponse struct {
-	Code string `json:"code"`
+	Code    string `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -56,7 +57,7 @@ func (c *Client) getAuthHeader() string {
 }
 
 func (c *Client) getApiEndpoint(apiPath string) string {
-	return c.ApiBaseUrl + apiPath
+	return fmt.Sprintf("%s/%s/%s", c.ApiBaseUrl, c.Version, apiPath)
 }
 
 func (c *Client) request(method, apiPath string, body io.Reader) (io.ReadCloser, error) {

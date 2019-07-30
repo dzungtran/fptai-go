@@ -1,2 +1,2 @@
 # fptai-go
-Golang client for fpt.ai HTTP API
+Golang client for bot.fpt.ai HTTP API

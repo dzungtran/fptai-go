@@ -56,7 +56,7 @@ func (c *Client) GetCurrentTrainingStatus(model string) (*TrainingStatus, error)
 		model = ""
 	}
 
-	resp, err := c.request(http.MethodPost, "/train/status", nil)
+	resp, err := c.request(http.MethodPost, "train/status", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (c *Client) GetTrainingModelStatus(model string) (*TrainingModelStatusRespo
 		model = ""
 	}
 
-	resp, err := c.request(http.MethodPost, "/train"+model, nil)
+	resp, err := c.request(http.MethodPost, "train"+model, nil)
 	if err != nil {
 		return nil, err
 	}

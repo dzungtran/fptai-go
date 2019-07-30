@@ -3,6 +3,7 @@ package fptai_go
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
@@ -65,4 +66,11 @@ func TestClient_GetNPLPredictEntities(t *testing.T) {
 	if len(predictResp.Data.Entities) != 1 {
 		t.Errorf("expected 1 entities, got: %v", predictResp.Data.Entities)
 	}
+}
+
+func TestClient_GetNPLPredictLive(t *testing.T) {
+	client := NewClient(os.Getenv("FPTAI_TEST_TOKEN"))
+	predictResp, err := client.GetNPLPredict("ngày 16 tháng sau vào thứ mấy?", false, "")
+	t.Logf("predictResp: %#v", predictResp)
+	t.Logf("err: %v", err)
 }

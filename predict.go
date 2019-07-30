@@ -16,15 +16,17 @@ type NPLPredictStatus struct {
 	Code    int64  `json:"code"`
 	Message string `json:"message"`
 	Module  string `json:"module"`
-	ApiCode string `json:"api_code"`
-	ErrCode string `json:"err_code"`
+	ApiCode int64  `json:"api_code"`
+	ErrCode int64  `json:"err_code"`
+	Detail  string `json:"detail"`
+	AppCode string `json:"app_code"`
 }
 
 type NPLPredictEntity struct {
 	Start       int64       `json:"start"`
 	End         int64       `json:"end"`
 	Value       string      `json:"value"`
-	RealValue   string      `json:"real_value"`
+	RealValue   interface{} `json:"real_value"`
 	Entity      string      `json:"entity"`
 	Subentities interface{} `json:"subentities"`
 }
@@ -74,7 +76,7 @@ func (c *Client) GetNPLPredict(content string, saveHistory bool, contain string)
 		return nil, err
 	}
 
-	resp, err := c.request(http.MethodPost, "/predict"+contain, bytes.NewBuffer(jsonRequest))
+	resp, err := c.request(http.MethodPost, "predict"+contain, bytes.NewBuffer(jsonRequest))
 	if err != nil {
 		return nil, err
 	}
