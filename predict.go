@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	PredictIntent string = "intent"
-	PredictEntity string = "entity"
-	PredictAll    string = "all"
+	ContainIntent string = "intent"
+	ContainEntity string = "entity"
+	ContainAll    string = "all"
 )
 
-type NPLPredictStatus struct {
+type PredictStatus struct {
 	Code    int64  `json:"code"`
 	Message string `json:"message"`
 	Module  string `json:"module"`
@@ -22,7 +22,7 @@ type NPLPredictStatus struct {
 	AppCode string `json:"app_code"`
 }
 
-type NPLPredictEntity struct {
+type PredictEntity struct {
 	Start       int64       `json:"start"`
 	End         int64       `json:"end"`
 	Value       string      `json:"value"`
@@ -31,32 +31,32 @@ type NPLPredictEntity struct {
 	Subentities interface{} `json:"subentities"`
 }
 
-type NPLPredictIntent struct {
+type PredictIntent struct {
 	Label      string  `json:"label"`
 	Confidence float64 `json:"confidence"`
 }
 
-type NPLPredict struct {
-	Entities  []NPLPredictEntity `json:"entities"`
-	Intents   []NPLPredictIntent `json:"intents"`
+type Predict struct {
+	Entities  []PredictEntity `json:"entities"`
+	Intents   []PredictIntent `json:"intents"`
 	HistoryId int64              `json:"history_id"`
 }
 
-type NPLPredictRequest struct {
+type PredictRequest struct {
 	Content     string `json:"content"`
 	SaveHistory bool   `json:"save_history"`
 }
 
-type NPLPredictResponse struct {
-	Status NPLPredictStatus `json:"status"`
-	Data   NPLPredict       `json:"data"`
+type PredictResponse struct {
+	Status PredictStatus `json:"status"`
+	Data   Predict       `json:"data"`
 }
 
 // GetNPLPredict - https://docs.fpt.ai/#nlp-predict
-func (c *Client) GetNPLPredict(content string, saveHistory bool, contain string) (*NPLPredictResponse, error) {
+func (c *Client) GetPredict(content string, saveHistory bool, contain string) (*PredictResponse, error) {
 	copyContain := contain
 
-	for _, c := range []string{PredictIntent, PredictEntity} {
+	for _, c := range []string{ContainIntent, ContainEntity} {
 		if c == copyContain {
 			contain = "/" + copyContain
 			break
@@ -67,7 +67,7 @@ func (c *Client) GetNPLPredict(content string, saveHistory bool, contain string)
 		contain = ""
 	}
 
-	predictRequest := &NPLPredictRequest{
+	predictRequest := &PredictRequest{
 		Content:     content,
 		SaveHistory: saveHistory,
 	}
@@ -83,18 +83,18 @@ func (c *Client) GetNPLPredict(content string, saveHistory bool, contain string)
 
 	defer resp.Close()
 
-	var predict *NPLPredictResponse
+	var predict *PredictResponse
 	decoder := json.NewDecoder(resp)
 	err = decoder.Decode(&predict)
 	return predict, err
 }
 
 // GetNPLPredictEntities -
-func (c *Client) GetNPLPredictEntities(content string, saveHistory bool) (*NPLPredictResponse, error) {
-	return c.GetNPLPredict(content, saveHistory, PredictEntity)
+func (c *Client) GetPredictEntities(content string, saveHistory bool) (*PredictResponse, error) {
+	return c.GetPredict(content, saveHistory, ContainEntity)
 }
 
 // GetNPLPredictIntents -
-func (c *Client) GetNPLPredictIntents(content string, saveHistory bool) (*NPLPredictResponse, error) {
-	return c.GetNPLPredict(content, saveHistory, PredictIntent)
+func (c *Client) GetPredictIntents(content string, saveHistory bool) (*PredictResponse, error) {
+	return c.GetPredict(content, saveHistory, ContainIntent)
 }

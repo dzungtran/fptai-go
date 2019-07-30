@@ -15,7 +15,7 @@ func TestClient_GetNPLPredict(t *testing.T) {
 
 	c := NewClient("UnitTestToken")
 	c.ApiBaseUrl = testServer.URL
-	predictResp, _ := c.GetNPLPredict("Test content", true, PredictAll)
+	predictResp, _ := c.GetPredict("Test content", true, ContainAll)
 
 	if predictResp.Status.Code != 200 {
 		t.Errorf("expected status code 200, got: %v", predictResp.Status.Code)
@@ -30,7 +30,7 @@ func TestClient_GetNPLPredict(t *testing.T) {
 	}
 }
 
-func TestClient_GetNPLPredictIntents(t *testing.T) {
+func TestClient_GetPredictIntents(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(`{"status":{"code":200,"message":"Predict Intents successful","module":"","api_code":0,"err_code":0},"data":{"intents":[{"label":"product_info","confidence":0.99},{"label":"purchase","confidence":0.005}]}}`))
 	}))
@@ -38,7 +38,7 @@ func TestClient_GetNPLPredictIntents(t *testing.T) {
 
 	c := NewClient("UnitTestToken")
 	c.ApiBaseUrl = testServer.URL
-	predictResp, _ := c.GetNPLPredict("Test content", true, PredictIntent)
+	predictResp, _ := c.GetPredictIntents("Test content", false)
 
 	if predictResp.Status.Code != 200 {
 		t.Errorf("expected status code 200, got: %v", predictResp.Status.Code)
@@ -49,7 +49,7 @@ func TestClient_GetNPLPredictIntents(t *testing.T) {
 	}
 }
 
-func TestClient_GetNPLPredictEntities(t *testing.T) {
+func TestClient_GetPredictEntities(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(`{"status":{"code":200,"message":"Recognize Entities successful","module":"","api_code":0,"err_code":0},"data":{"entities":[{"start":32,"end":41,"value":"vegetable","real_value":"vegetable","entity":"product_name","subentities":[]}]}}`))
 	}))
@@ -57,7 +57,7 @@ func TestClient_GetNPLPredictEntities(t *testing.T) {
 
 	c := NewClient("UnitTestToken")
 	c.ApiBaseUrl = testServer.URL
-	predictResp, _ := c.GetNPLPredict("Test content", true, PredictEntity)
+	predictResp, _ := c.GetPredictEntities("Test content", true)
 
 	if predictResp.Status.Code != 200 {
 		t.Errorf("expected status code 200, got: %v", predictResp.Status.Code)
@@ -70,7 +70,7 @@ func TestClient_GetNPLPredictEntities(t *testing.T) {
 
 func TestClient_GetNPLPredictLive(t *testing.T) {
 	client := NewClient(os.Getenv("FPTAI_TEST_TOKEN"))
-	predictResp, err := client.GetNPLPredict("ngày 16 tháng sau vào thứ mấy?", false, "")
+	predictResp, err := client.GetPredict("ngày 16 tháng sau vào thứ mấy?", false, "")
 	t.Logf("predictResp: %#v", predictResp)
 	t.Logf("err: %v", err)
 }
