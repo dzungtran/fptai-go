@@ -74,7 +74,7 @@ func (c *Client) request(method, apiPath string, body io.Reader) (io.ReadCloser,
 		return nil, err
 	}
 
-	if resp.StatusCode >= http.StatusBadRequest {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		defer resp.Body.Close()
 
 		var e *CommonResponse

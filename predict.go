@@ -6,6 +6,12 @@ import (
 	"net/http"
 )
 
+const (
+	PredictIntent string = "intent"
+	PredictEntity string = "entity"
+	PredictAll    string = "all"
+)
+
 type NPLPredictStatus struct {
 	Code    int64  `json:"code"`
 	Message string `json:"message"`
@@ -48,7 +54,7 @@ type NPLPredictResponse struct {
 func (c *Client) GetNPLPredict(content string, saveHistory bool, contain string) (*NPLPredictResponse, error) {
 	copyContain := contain
 
-	for _, c := range []string{"intent", "entity"} {
+	for _, c := range []string{PredictIntent, PredictEntity} {
 		if c == copyContain {
 			contain = "/" + copyContain
 			break
@@ -83,10 +89,10 @@ func (c *Client) GetNPLPredict(content string, saveHistory bool, contain string)
 
 // GetNPLPredictEntities -
 func (c *Client) GetNPLPredictEntities(content string, saveHistory bool) (*NPLPredictResponse, error) {
-	return c.GetNPLPredict(content, saveHistory, "entity")
+	return c.GetNPLPredict(content, saveHistory, PredictEntity)
 }
 
 // GetNPLPredictIntents -
 func (c *Client) GetNPLPredictIntents(content string, saveHistory bool) (*NPLPredictResponse, error) {
-	return c.GetNPLPredict(content, saveHistory, "intent")
+	return c.GetNPLPredict(content, saveHistory, PredictIntent)
 }
