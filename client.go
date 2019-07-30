@@ -77,18 +77,14 @@ func (c *Client) request(method, apiPath string, body io.Reader) (io.ReadCloser,
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		defer resp.Body.Close()
 
-		var e *CommonResponse
+		var e interface{}
 		decoder := json.NewDecoder(resp.Body)
 		err = decoder.Decode(&e)
 		if err != nil {
 			return nil, fmt.Errorf("unable to decode error message: %s", err.Error())
 		}
 
-		if len(e.Message) > 0 {
-			return nil, fmt.Errorf("unable to make a request. error: %s", e.Message)
-		}
-
-		return nil, fmt.Errorf("unable to make a request. error: %v", e)
+		return nil, fmt.Errorf("error while make api request. resp: %v", e)
 	}
 	return resp.Body, nil
 }
