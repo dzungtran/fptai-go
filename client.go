@@ -11,6 +11,7 @@ import (
 const (
 	DefaultApiVersion = "v3"
 	ApiBaseUrl        = "https://v3-api.fpt.ai/api"
+	DefaultTimeout    = 20
 )
 
 // API docs: https://docs.fpt.ai/#general
@@ -41,7 +42,7 @@ func (c *Client) SetBotToken(token string) {
 // NewClient - returns fpt.ai client
 func NewClient(token string) *Client {
 	defaultHttpClient := &http.Client{
-		Timeout: time.Second * 10,
+		Timeout: time.Second * DefaultTimeout,
 	}
 
 	return &Client{
